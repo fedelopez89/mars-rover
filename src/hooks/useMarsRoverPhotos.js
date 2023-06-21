@@ -29,6 +29,8 @@ const useMarsRoverPhotos = ({
           params.earth_date = earth;
         } else if (sol !== null) {
           params.sol = sol;
+        } else if (!earth && !sol) {
+          params.earth_date = getEarthDate();
         }
 
         params.api_key = API_KEY;
