@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Components
-import HomePage from "./components/HomePage";
-import RoverPhotos from "./components/RoverPhotos";
+import HomePage from "./components/HomePage/HomePage";
+import RoverPhotos from "./components/RoverPhotos/RoverPhotos";
 // Styles
 import "./App.css";
 
