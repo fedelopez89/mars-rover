@@ -60,6 +60,18 @@ const useStyles = makeStyles((theme) => ({
     buttonContainerVisible: {
         opacity: 1,
     },
+    startButton: {
+        width: "100%",
+        marginTop: theme.spacing(1),
+        backgroundColor: "#000",
+        color: "#fff",
+        "&:hover": {
+            backgroundColor: "#333",
+        },
+        "&:focus": {
+            backgroundColor: "#555",
+        },
+    },
 }));
 
 export default useStyles;

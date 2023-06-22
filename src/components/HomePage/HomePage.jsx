@@ -39,6 +39,7 @@ function HomePage() {
                             variant="contained"
                             color="primary"
                             component={Link}
+                            className={classes.startButton}
                             to="/mars-rover-photos"
                         >
                             {CONST_BUTTON.BUTTON_HOME_PAGE_START}
