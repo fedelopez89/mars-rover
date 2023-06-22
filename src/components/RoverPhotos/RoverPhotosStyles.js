@@ -54,9 +54,11 @@ const useStyles = makeStyles((theme) => ({
         alignItems: "center",
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
+        padding: "3% 5%",
+        gap: "24px",
         minHeight: "30vh",
         "& > .MuiGrid-item": {
-            flex: "0 0 calc(25% - 16px)", // Ancho del 25% con margen entre elementos
+            flex: "0 0 calc(25% - 16px)",
             margin: theme.spacing(1),
         },
     },
