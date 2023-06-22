@@ -5,6 +5,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  Modal,
   Select,
   TextField,
   Typography,
@@ -36,6 +37,7 @@ const RoverPhotos = () => {
   const [selectedSol, setSelectedSol] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [favoritesPhotos, setFavoritesPhotos] = useState([]);
+  const [openFavoriteModal, setOpenFavoriteModal] = useState(false);
   const perPage = 25;
 
   const { photos, loading, totalPages } = useMarsRoverPhotos({
@@ -55,16 +57,18 @@ const RoverPhotos = () => {
         date: selectedDate,
         sol: selectedSol,
       };
+      const updatedFavorites =
+        favorites?.length > 0 ? [...favorites, newFavorite] : [newFavorite];
+      localStorage.setItem("favoriteSearch", JSON.stringify(updatedFavorites));
       setFavorites((prevFavorites) =>
         prevFavorites?.length > 0
           ? [...prevFavorites, newFavorite]
           : [newFavorite]
       );
-      localStorage.setItem("favoriteSearch", JSON.stringify(newFavorite));
     }
   };
 
-  const handlePageChange = useCallback((event, page) => {
+  const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
   }, []);
 
@@ -107,6 +111,18 @@ const RoverPhotos = () => {
       return updatedFavorites;
     });
   }, []);
+
+  const handleOpenFavoriteSave = () => {
+    setOpenFavoriteModal(true);
+  };
+
+  const handleFavoriteSelection = (favorite) => {
+    setSelectedRover(favorite.rover);
+    setSelectedCamera(favorite.camera);
+    setSelectedDate(favorite.date);
+    setSelectedSol(favorite.sol);
+    setOpenFavoriteModal(false);
+  };
 
   useEffect(() => {
     const favoritesFromStorage = localStorage.getItem("favoritesPhotos");
@@ -256,7 +272,7 @@ const RoverPhotos = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <Button
-                onClick={handleFavoriteSave}
+                onClick={handleOpenFavoriteSave}
                 className={classes.secondaryButton}
               >
                 {CONST_BUTTON.BUTTON_OPEN_SEARCH_FAV}
@@ -297,6 +313,25 @@ const RoverPhotos = () => {
           </div>
         )}
       </div>
+      <Modal
+        open={openFavoriteModal}
+        onClose={() => setOpenFavoriteModal(false)}
+      >
+        <div className={classes.favoriteModal}>
+          <Typography variant="h6" className={classes.favoriteModalTitle}>
+            Favorite Searches
+          </Typography>
+          {favorites?.map((favorite, index) => (
+            <div
+              key={index}
+              className={classes.favoriteModalItem}
+              onClick={() => handleFavoriteSelection(favorite)}
+            >
+              <Typography variant="body1">{`${favorite?.rover} - ${favorite?.camera} - ${favorite?.date} - ${favorite?.sol}`}</Typography>
+            </div>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 };
