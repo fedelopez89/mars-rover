@@ -10,13 +10,16 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { Pagination } from "@mui/lab";
+import { Pagination } from "@mui/material";
+import { Link } from "react-router-dom";
 // Components
 import CardImage from "../CardImage/CardImage";
 // Images
 import marsImage2 from "../../assets/mars-image2.jpeg";
 // Utils
-import useMarsRoverPhotos from "../../hooks/useMarsRoverPhotos";
+import useMarsRoverPhotos, {
+  getEarthDate,
+} from "../../hooks/useMarsRoverPhotos";
 // Constants
 import * as CONST_CONFIG from "../../constants/roverPhotos";
 import * as CONST_BUTTON from "../../constants/buttons";
@@ -27,15 +30,16 @@ const RoverPhotos = () => {
   const classes = useStyles();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCamera, setSelectedCamera] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(getEarthDate());
   const [selectedSol, setSelectedSol] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [favoritesPhotos, setFavoritesPhotos] = useState([]);
   const perPage = 25;
 
   const { photos, loading, totalPages } = useMarsRoverPhotos({
     rover: "curiosity",
-    camera: selectedCamera === "All" ? null : selectedCamera,
-    earth: selectedDate,
+    camera: selectedCamera === "all" ? null : selectedCamera,
+    earth: selectedDate === "" ? null : selectedDate,
     sol: selectedSol,
     page: currentPage,
     perPage,
@@ -64,17 +68,40 @@ const RoverPhotos = () => {
 
   const handleDateChange = useCallback((event) => {
     setSelectedDate(event.target.value);
+    setSelectedSol("");
     setCurrentPage(1);
   }, []);
 
   const handleSolChange = useCallback((event) => {
     setSelectedSol(event.target.value);
+    setSelectedDate(" ");
     setCurrentPage(1);
   }, []);
 
-  const handleFavoriteClick = useCallback((event) => {
-    event.stopPropagation();
-    // Lógica para agregar a favoritos
+  const handleFavoriteClick = useCallback((photo) => {
+    setFavoritesPhotos((prevFavorites) => {
+      const isFavorite = prevFavorites.some(
+        (favorite) => favorite.id === photo.id
+      );
+      let updatedFavorites = [];
+      if (isFavorite) {
+        updatedFavorites = prevFavorites.filter(
+          (favorite) => favorite.id !== photo.id
+        );
+      } else {
+        updatedFavorites = [...prevFavorites, photo];
+      }
+      localStorage.setItem("favoritesPhotos", JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
+  }, []);
+
+  useEffect(() => {
+    const favoritesFromStorage = localStorage.getItem("favoritesPhotos");
+    const initialFavoritesPhotos = favoritesFromStorage
+      ? JSON.parse(favoritesFromStorage)
+      : [];
+    setFavoritesPhotos(initialFavoritesPhotos);
   }, []);
 
   const renderPhotos = () => {
@@ -91,6 +118,7 @@ const RoverPhotos = () => {
       <CardImage
         key={photo.id}
         photo={photo}
+        favoritesPhotos={favoritesPhotos}
         onFavoriteClick={handleFavoriteClick}
       />
     ));
@@ -144,6 +172,14 @@ const RoverPhotos = () => {
             >
               {CONST_BUTTON.BUTTON_ADD_TO_FAV}
             </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/mars-rover-photos/favorites"
+            >
+              {CONST_BUTTON.BUTTON_VIEW_FAV}
+            </Button>
           </Grid>
           {/* Earth Day Date */}
           <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -155,7 +191,7 @@ const RoverPhotos = () => {
               {CONST_CONFIG.SEARCH_EARTH_DAY_DATE}
             </InputLabel>
             <TextField
-              label="Earth Day Date"
+              label=" "
               type="date"
               className={classes.textField}
               InputLabelProps={{
@@ -165,7 +201,7 @@ const RoverPhotos = () => {
               InputProps={{
                 placeholder: "Select Earth Day Date",
               }}
-              value={selectedDate || ""}
+              value={selectedDate}
               onChange={handleDateChange}
             />
           </Grid>
@@ -179,7 +215,7 @@ const RoverPhotos = () => {
               {CONST_CONFIG.SEARCH_SOL}
             </InputLabel>
             <TextField
-              label="Sol"
+              label=" "
               type="number"
               className={classes.textField}
               InputLabelProps={{

@@ -60,7 +60,7 @@ const useMarsRoverPhotos = ({
   return { photos, loading, totalPages };
 };
 
-const getEarthDate = () => {
+export const getEarthDate = () => {
   const now = new Date();
   const utcDate = new Date(
     now.getUTCFullYear(),
