@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-const API_KEY = "wljhnnGdFl9r3MLBTzyMrKTjItUWJ7pqzijkAGuf";
+// Constants
+import * as CONST_CONFIG from "../constants/roverPhotos";
 
 const useMarsRoverPhotos = ({
   rover,
@@ -9,7 +9,7 @@ const useMarsRoverPhotos = ({
   earth = getEarthDate(),
   sol = null,
   page = 1,
-  perPage = 25,
+  perPage = CONST_CONFIG.IMAGES_PER_PAGE,
 }) => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,10 +33,10 @@ const useMarsRoverPhotos = ({
           params.earth_date = getEarthDate();
         }
 
-        params.api_key = API_KEY;
+        params.api_key = CONST_CONFIG.API_KEY;
 
         const response = await axios.get(
-          `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos`,
+          `${CONST_CONFIG.BASE_URL}/${rover}/photos`,
           {
             params,
           }

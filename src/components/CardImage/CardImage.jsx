@@ -4,7 +4,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 // Styles
 import useStyles from "./CardImageStyles";
 
-const CardImage = ({ photo, favoritesPhotos, onFavoriteClick }) => {
+const CardImage = ({ photo, favoritesPhotos, onFavoriteClick = () => {} }) => {
   const classes = useStyles();
   const [isFavorite, setIsFavorite] = useState(false);
 

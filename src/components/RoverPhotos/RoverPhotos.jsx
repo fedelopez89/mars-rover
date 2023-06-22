@@ -29,7 +29,9 @@ const RoverPhotos = () => {
   const classes = useStyles();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCamera, setSelectedCamera] = useState(null);
-  const [selectedRover, setSelectedRover] = useState("curiosity");
+  const [selectedRover, setSelectedRover] = useState(
+    CONST_CONFIG.DEFAULT_ROVER
+  );
   const [selectedDate, setSelectedDate] = useState(getEarthDate());
   const [selectedSol, setSelectedSol] = useState(null);
   const [favorites, setFavorites] = useState([]);
