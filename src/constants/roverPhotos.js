@@ -1,9 +1,14 @@
-export const SELECT_CAMERA_FILTER = "Select a camera...";
 export const HOME_PAGE_TITLE = "Mars Rover";
 //
-export const FIELD_CAMERA = "Select Camera";
-export const SEARCH_EARTH_DAY_DATE = "Earth Day Date";
-export const SEARCH_SOL = "Sol number";
+export const SEARCH_CAMERA = "Search by Camera";
+export const SEARCH_ROVER = "Search by Rover";
+export const SEARCH_EARTH_DAY_DATE = "Search by Earth Day Date";
+export const SEARCH_SOL = "Search by Sol (number)";
+export const ROVER_OPTIONS = [
+    { value: "Curiosity", text: "Curiosity" },
+    { value: "Opportunity", text: "Opportunity" },
+    { value: "Spirit", text: "Spirit" },
+];
 export const CAMERA_OPTIONS = [
     { value: "all", text: "All Cameras" },
     { value: "FHAZ", text: "Front Hazard Avoidance Camera" },

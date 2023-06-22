@@ -4,7 +4,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         minHeight: "100vh",
         padding: theme.spacing(3),
-        backgroundColor: "#a97a51",
+        backgroundColor: "#917d6c",
     },
     header: {
         height: 200,
@@ -37,15 +37,37 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-        width: "100%",
+        marginTop: 0,
+    },
+    searchWrapper: {
+        marginBottom: theme.spacing(2),
+        padding: theme.spacing(3),
     },
     inputLabel: {
-        color: "#fff",
+        fontWeight: "bold",
+        textAlign: "left",
+    },
+    selectField: {
+        width: "100%",
     },
     textField: {
+        width: "100%",
+        marginTop: 0,
+        "& label + .MuiInput-formControl": {
+            marginTop: 0,
+        },
+    },
+    saveButton: {
+        width: "100%",
+        marginTop: theme.spacing(1),
+        backgroundColor: "#000",
         color: "#fff",
+        "&:hover": {
+            backgroundColor: "#333",
+        },
+        "&:focus": {
+            backgroundColor: "#555",
+        },
     },
     imageContainer: {
         display: "flex",
@@ -61,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
             flex: "0 0 calc(25% - 16px)",
             margin: theme.spacing(1),
         },
+        paddingTop: "1%",
     },
     paginationContainer: {
         display: "flex",
@@ -88,6 +111,10 @@ const useStyles = makeStyles((theme) => ({
         fontStyle: "italic",
         fontWeight: "bold",
         fontSize: "1.2rem",
+    },
+    "label + .MuiInput-formControl": {
+        marginTop: 0,
+        width: "100%",
     },
 }));
 

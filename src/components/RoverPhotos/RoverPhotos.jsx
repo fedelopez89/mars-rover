@@ -3,7 +3,6 @@ import {
   Button,
   CircularProgress,
   Grid,
-  FormControl,
   InputLabel,
   MenuItem,
   Select,
@@ -30,6 +29,7 @@ const RoverPhotos = () => {
   const classes = useStyles();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCamera, setSelectedCamera] = useState(null);
+  const [selectedRover, setSelectedRover] = useState("curiosity");
   const [selectedDate, setSelectedDate] = useState(getEarthDate());
   const [selectedSol, setSelectedSol] = useState(null);
   const [favorites, setFavorites] = useState([]);
@@ -37,7 +37,7 @@ const RoverPhotos = () => {
   const perPage = 25;
 
   const { photos, loading, totalPages } = useMarsRoverPhotos({
-    rover: "curiosity",
+    rover: selectedRover,
     camera: selectedCamera === "all" ? null : selectedCamera,
     earth: selectedDate === "" ? null : selectedDate,
     sol: selectedSol,
@@ -46,19 +46,29 @@ const RoverPhotos = () => {
   });
 
   const handleFavoriteSave = () => {
-    if (selectedCamera || selectedDate || selectedSol) {
+    if (selectedRover || selectedCamera || selectedDate || selectedSol) {
       const newFavorite = {
+        rover: selectedRover,
         camera: selectedCamera,
         date: selectedDate,
         sol: selectedSol,
       };
-      setFavorites((prevFavorites) => [...prevFavorites, newFavorite]);
+      setFavorites((prevFavorites) =>
+        prevFavorites?.length > 0
+          ? [...prevFavorites, newFavorite]
+          : [newFavorite]
+      );
       localStorage.setItem("favoriteSearch", JSON.stringify(newFavorite));
     }
   };
 
   const handlePageChange = useCallback((event, page) => {
     setCurrentPage(page);
+  }, []);
+
+  const handleRoverChange = useCallback((event) => {
+    setSelectedRover(event.target.value);
+    setCurrentPage(1);
   }, []);
 
   const handleCameraChange = useCallback((event) => {
@@ -137,99 +147,117 @@ const RoverPhotos = () => {
         <img src={marsImage2} alt="Header" className={classes.headerImage} />
       </header>
       <div>
-        <Grid container spacing={2} className={classes.fieldsContainer}>
-          {/* Camera Filter */}
-          <Grid item xs={12} sm={6} md={4} lg={3}>
-            <FormControl className={classes.formControl}>
+        <div className={classes.searchWrapper}>
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Grid item xs={12} sm={6} md={4} lg={3}>
               <InputLabel
                 className={classes.inputLabel}
-                id="camera-filter-label"
+                id="rover-search-label"
                 shrink
               >
-                {CONST_CONFIG.FIELD_CAMERA}
+                {CONST_CONFIG.SEARCH_ROVER}
               </InputLabel>
               <Select
-                labelId="camera-filter-label"
-                id="camera-filter"
+                labelId="rover-search-label"
+                id="rover-search"
+                value={selectedRover || ""}
+                onChange={handleRoverChange}
+                className={classes.selectField}
+              >
+                {CONST_CONFIG.ROVER_OPTIONS.map(({ value, text }) => (
+                  <MenuItem key={value} value={value}>
+                    {text}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <InputLabel
+                className={classes.inputLabel}
+                id="camera-search-label"
+                shrink
+              >
+                {CONST_CONFIG.SEARCH_CAMERA}
+              </InputLabel>
+              <Select
+                labelId="camera-search-label"
+                id="camera-search"
                 value={selectedCamera || ""}
                 onChange={handleCameraChange}
-                displayEmpty
+                className={classes.selectField}
               >
-                <MenuItem disabled value="">
-                  {CONST_CONFIG.SELECT_CAMERA_FILTER}
-                </MenuItem>
                 {CONST_CONFIG.CAMERA_OPTIONS.map(({ value, text }) => (
                   <MenuItem key={value} value={value}>
                     {text}
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleFavoriteSave}
-            >
-              {CONST_BUTTON.BUTTON_ADD_TO_FAV}
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              component={Link}
-              to="/mars-rover-photos/favorites"
-            >
-              {CONST_BUTTON.BUTTON_VIEW_FAV}
-            </Button>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <InputLabel
+                className={classes.inputLabel}
+                id="date-input-label"
+                shrink={Boolean(selectedDate)}
+              >
+                {CONST_CONFIG.SEARCH_EARTH_DAY_DATE}
+              </InputLabel>
+              <TextField
+                label=" "
+                type="date"
+                className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                  className: classes.inputLabel,
+                }}
+                value={selectedDate}
+                onChange={handleDateChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <InputLabel
+                className={classes.inputLabel}
+                id="date-input-label"
+                shrink={Boolean(selectedDate)}
+              >
+                {CONST_CONFIG.SEARCH_SOL}
+              </InputLabel>
+              <TextField
+                label=" "
+                type="number"
+                className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                  className: classes.inputLabel,
+                }}
+                value={selectedSol || ""}
+                onChange={handleSolChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleFavoriteSave}
+                className={classes.saveButton}
+              >
+                {CONST_BUTTON.BUTTON_ADD_TO_FAV}
+              </Button>
+            </Grid>
           </Grid>
-          {/* Earth Day Date */}
-          <Grid item xs={12} sm={6} md={4} lg={3}>
-            <InputLabel
-              className={classes.inputLabel}
-              id="date-input-label"
-              shrink={Boolean(selectedDate)}
-            >
-              {CONST_CONFIG.SEARCH_EARTH_DAY_DATE}
-            </InputLabel>
-            <TextField
-              label=" "
-              type="date"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-                className: classes.inputLabel,
-              }}
-              InputProps={{
-                placeholder: "Select Earth Day Date",
-              }}
-              value={selectedDate}
-              onChange={handleDateChange}
-            />
-          </Grid>
-          {/* Sol */}
-          <Grid item xs={12} sm={6} md={4} lg={3}>
-            <InputLabel
-              className={classes.inputLabel}
-              id="date-input-label"
-              shrink={Boolean(selectedDate)}
-            >
-              {CONST_CONFIG.SEARCH_SOL}
-            </InputLabel>
-            <TextField
-              label=" "
-              type="number"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-                className: classes.inputLabel,
-              }}
-              InputProps={{
-                placeholder: "Enter Sol",
-              }}
-              value={selectedSol || ""}
-              onChange={handleSolChange}
-            />
-          </Grid>
-        </Grid>
+        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/mars-rover-photos/favorites"
+        >
+          {CONST_BUTTON.BUTTON_VIEW_FAV}
+        </Button>
         {loading && (
           <div className={classes.loaderContainer}>
             <CircularProgress className={classes.loader} />
