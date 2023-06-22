@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "left",
     },
     selectField: {
+        textAlign: "left",
         width: "100%",
     },
     textField: {
@@ -67,6 +68,18 @@ const useStyles = makeStyles((theme) => ({
         },
         "&:focus": {
             backgroundColor: "#555",
+        },
+    },
+    secondaryButton: {
+        width: "100%",
+        marginTop: theme.spacing(1),
+        backgroundColor: "#d7d7d7",
+        color: "black",
+        "&:hover": {
+            backgroundColor: "#b8b8b8",
+        },
+        "&:focus": {
+            backgroundColor: "#767575",
         },
     },
     imageContainer: {

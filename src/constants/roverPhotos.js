@@ -5,10 +5,10 @@ export const SEARCH_ROVER = "Search by Rover";
 export const SEARCH_EARTH_DAY_DATE = "Search by Earth Day Date";
 export const SEARCH_SOL = "Search by Sol (number)";
 export const ROVER_OPTIONS = [
-    { value: "Curiosity", text: "Curiosity" },
-    { value: "Opportunity", text: "Opportunity" },
-    { value: "Spirit", text: "Spirit" },
-];
+    { value: "curiosity", text: "curiosity" },
+    { value: "opportunity", text: "opportunity" },
+    { value: "spirit", text: "spirit" },
+]
 export const CAMERA_OPTIONS = [
     { value: "all", text: "All Cameras" },
     { value: "FHAZ", text: "Front Hazard Avoidance Camera" },

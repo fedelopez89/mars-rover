@@ -214,6 +214,12 @@ const RoverPhotos = () => {
                   shrink: true,
                   className: classes.inputLabel,
                 }}
+                InputProps={{
+                  inputProps: {
+                    min: "1900-01-01",
+                    max: "2100-12-31",
+                  },
+                }}
                 value={selectedDate}
                 onChange={handleDateChange}
               />
@@ -240,12 +246,18 @@ const RoverPhotos = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <Button
-                variant="contained"
-                color="primary"
                 onClick={handleFavoriteSave}
                 className={classes.saveButton}
               >
                 {CONST_BUTTON.BUTTON_ADD_TO_FAV}
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <Button
+                onClick={handleFavoriteSave}
+                className={classes.secondaryButton}
+              >
+                {CONST_BUTTON.BUTTON_OPEN_SEARCH_FAV}
               </Button>
             </Grid>
           </Grid>

@@ -70,11 +70,9 @@ export const getEarthDate = () => {
   const usDate = new Date(
     utcDate.toLocaleString("en-US", { timeZone: "America/New_York" })
   );
-
   const year = usDate.getFullYear();
-  const month = String(usDate.getMonth() + 1);
-  const day = String(usDate.getDate());
-
+  const month = String(usDate.getMonth() + 1).padStart(2, "0");
+  const day = String(usDate.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
