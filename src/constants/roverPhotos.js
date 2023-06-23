@@ -36,3 +36,8 @@ export const DEFAULT_ROVER = "curiosity";
 export const BASE_URL = "https://api.nasa.gov/mars-photos/api/v1/rovers/";
 export const API_KEY = "wljhnnGdFl9r3MLBTzyMrKTjItUWJ7pqzijkAGuf";
 export const IMAGES_PER_PAGE = 25;
+//
+export const MODAL_TITLE_FAV_SEARCHS = "Favorite Searches";
+export const PARAMS_SEARCH_FAV = "Rover - Camera - Earth Date - Sol";
+export const NO_FAV_SEARCHES = "No favorite searches are currently saved.";
+//

@@ -131,6 +131,47 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 0,
         width: "100%",
     },
+    favoriteModalWrapper: {
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    favoriteModal: {
+        backgroundColor: "#FFFFFF",
+        padding: "32px",
+        borderRadius: "8px",
+        outline: "none",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: "auto",
+    },
+    favoriteModalTitle: {
+        marginBottom: "16px",
+        fontWeight: "bold",
+    },
+    favoriteModalItem: {
+        display: "flex",
+        alignItems: "center",
+        marginBottom: "8px",
+        justifyContent: "space-between",
+        width: "100%",
+    },
+    favoriteRowData: {
+        width: "80%",
+    },
+    favoriteModalItemText: {
+        flexGrow: 1,
+        marginRight: "8px",
+    },
+    removeFavoriteButton: {
+        color: theme.palette.error.main,
+    },
+    selectFavoriteButton: {
+        color: "green",
+    },
 }));
 
 export default useStyles;

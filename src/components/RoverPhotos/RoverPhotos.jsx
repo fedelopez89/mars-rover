@@ -3,6 +3,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Modal,
@@ -11,6 +12,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Pagination } from "@mui/material";
+import { CheckCircle, Close } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 // Components
 import CardImage from "../CardImage/CardImage";
@@ -38,7 +40,6 @@ const RoverPhotos = () => {
   const [favorites, setFavorites] = useState([]);
   const [favoritesPhotos, setFavoritesPhotos] = useState([]);
   const [openFavoriteModal, setOpenFavoriteModal] = useState(false);
-  const perPage = 25;
 
   const { photos, loading, totalPages } = useMarsRoverPhotos({
     rover: selectedRover,
@@ -46,7 +47,6 @@ const RoverPhotos = () => {
     earth: selectedDate === "" ? null : selectedDate,
     sol: selectedSol,
     page: currentPage,
-    perPage,
   });
 
   const handleFavoriteSave = () => {
@@ -90,7 +90,7 @@ const RoverPhotos = () => {
 
   const handleSolChange = useCallback((event) => {
     setSelectedSol(event.target.value);
-    setSelectedDate(" ");
+    setSelectedDate("");
     setCurrentPage(1);
   }, []);
 
@@ -122,6 +122,16 @@ const RoverPhotos = () => {
     setSelectedDate(favorite.date);
     setSelectedSol(favorite.sol);
     setOpenFavoriteModal(false);
+  };
+
+  const handleRemoveFavorite = (favSelected) => {
+    localStorage.setItem(
+      "favoriteSearch",
+      JSON.stringify(favorites.filter((favorite) => favorite !== favSelected))
+    );
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((favorite) => favorite !== favSelected)
+    );
   };
 
   useEffect(() => {
@@ -316,18 +326,35 @@ const RoverPhotos = () => {
       <Modal
         open={openFavoriteModal}
         onClose={() => setOpenFavoriteModal(false)}
+        className={classes.favoriteModalWrapper}
       >
         <div className={classes.favoriteModal}>
           <Typography variant="h6" className={classes.favoriteModalTitle}>
-            Favorite Searches
+            {CONST_CONFIG.MODAL_TITLE_FAV_SEARCHS}
+          </Typography>
+          <Typography className={classes.favoriteModalItem} variant="h6">
+            {favorites?.length === 0
+              ? CONST_CONFIG.NO_FAV_SEARCHES
+              : CONST_CONFIG.PARAMS_SEARCH_FAV}
           </Typography>
           {favorites?.map((favorite, index) => (
-            <div
-              key={index}
-              className={classes.favoriteModalItem}
-              onClick={() => handleFavoriteSelection(favorite)}
-            >
-              <Typography variant="body1">{`${favorite?.rover} - ${favorite?.camera} - ${favorite?.date} - ${favorite?.sol}`}</Typography>
+            <div key={index} className={classes.favoriteModalItem}>
+              <Typography
+                className={classes.favoriteRowData}
+                variant="body1"
+              >{`${favorite?.rover} - ${favorite?.camera} - ${favorite?.date} - ${favorite?.sol}`}</Typography>
+              <IconButton
+                className={classes.selectFavoriteButton}
+                onClick={() => handleFavoriteSelection(favorite)}
+              >
+                <CheckCircle />
+              </IconButton>
+              <IconButton
+                className={classes.removeFavoriteButton}
+                onClick={() => handleRemoveFavorite(favorite)}
+              >
+                <Close />
+              </IconButton>
             </div>
           ))}
         </div>
