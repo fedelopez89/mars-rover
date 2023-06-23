@@ -253,7 +253,7 @@ const RoverPhotos = () => {
               <InputLabel
                 className={classes.inputLabel}
                 id="date-input-label"
-                shrink={Boolean(galleryState?.selectedSol)}
+                shrink={true}
               >
                 {CONST_CONFIG.SEARCH_SOL}
               </InputLabel>
