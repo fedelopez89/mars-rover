@@ -44,7 +44,7 @@ const FavoritePhotos = () => {
         variant="contained"
         color="primary"
         component={Link}
-        className={classes.startButton}
+        className={classes.customButton}
         to="/mars-rover-photos"
       >
         {CONST_BUTTON.BUTTON_GO_BACK}

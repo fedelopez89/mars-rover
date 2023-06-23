@@ -291,10 +291,9 @@ const RoverPhotos = () => {
           </Grid>
         </div>
         <Button
-          variant="contained"
-          color="primary"
           component={Link}
           to="/mars-rover-photos/favorites"
+          className={classes.customButton}
         >
           {CONST_BUTTON.BUTTON_VIEW_FAV}
         </Button>

@@ -60,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         padding: theme.spacing(1),
         backgroundColor: "rgba(0, 0, 0, 0.6)",
+        "&:hover": {
+            backgroundColor: "rgb(117 90 90 / 60%)",
+        },
     },
 }));
 

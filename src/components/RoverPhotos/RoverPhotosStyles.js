@@ -60,6 +60,17 @@ const useStyles = makeStyles((theme) => ({
             marginTop: 0,
         },
     },
+    customButton: {
+        marginTop: theme.spacing(1),
+        backgroundColor: "#67513e",
+        color: "#fff",
+        "&:hover": {
+            backgroundColor: "#91745c",
+        },
+        "&:focus": {
+            backgroundColor: "#91745c",
+        },
+    },
     saveButton: {
         width: "100%",
         marginTop: theme.spacing(1),

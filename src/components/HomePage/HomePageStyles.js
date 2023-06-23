@@ -1,8 +1,16 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-    container: {
+    homePageWrapper: {
         height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#000",
+        flexDirection: "column",
+        gap: "2%",
+    },
+    container: {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -22,11 +30,6 @@ const useStyles = makeStyles((theme) => ({
         objectFit: "cover",
     },
     overlay: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
         background: "rgba(0, 0, 0, 0.6)",
         display: "flex",
         alignItems: "center",
@@ -40,9 +43,11 @@ const useStyles = makeStyles((theme) => ({
         opacity: 1,
     },
     title: {
+        color: "white",
+        fontFamily: "cursive",
         marginBottom: theme.spacing(2),
         fontWeight: "bold",
-        fontSize: "2rem",
+        fontSize: "3rem",
         textAlign: "center",
         transition: "opacity 1s ease-in-out 1s",
         textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)",
@@ -55,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
         gap: theme.spacing(2),
         opacity: 0,
-        transition: "opacity 1s ease-in-out 2s",
+        transition: "opacity 1s ease-in-out 1.25s",
     },
     buttonContainerVisible: {
         opacity: 1,
@@ -63,13 +68,13 @@ const useStyles = makeStyles((theme) => ({
     startButton: {
         width: "100%",
         marginTop: theme.spacing(1),
-        backgroundColor: "#000",
+        backgroundColor: "#67513e",
         color: "#fff",
         "&:hover": {
-            backgroundColor: "#333",
+            backgroundColor: "#91745c",
         },
         "&:focus": {
-            backgroundColor: "#555",
+            backgroundColor: "#91745c",
         },
     },
 }));
