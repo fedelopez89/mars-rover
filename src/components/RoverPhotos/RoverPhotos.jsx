@@ -16,8 +16,7 @@ import { CheckCircle, Close } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 // Components
 import CardImage from "../CardImage/CardImage";
-// Images
-import marsImage2 from "../../assets/mars-image2.jpeg";
+import Header from "../Header/Header";
 // Utils
 import useMarsRoverPhotos, {
   getEarthDate,
@@ -171,9 +170,7 @@ const RoverPhotos = () => {
 
   return (
     <div className={classes.root}>
-      <header className={classes.header}>
-        <img src={marsImage2} alt="Header" className={classes.headerImage} />
-      </header>
+      <Header />
       <div>
         <div className={classes.searchWrapper}>
           <Grid

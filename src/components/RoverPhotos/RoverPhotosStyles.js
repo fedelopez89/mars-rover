@@ -6,21 +6,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3),
         backgroundColor: "#917d6c",
     },
-    header: {
-        height: 200,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#000",
-        marginBottom: theme.spacing(3),
-    },
-    headerImage: {
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        objectPosition: "100%",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    },
     loaderContainer: {
         display: "flex",
         alignItems: "center",

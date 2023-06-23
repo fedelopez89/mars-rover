@@ -3,8 +3,7 @@ import { Button, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 // Components
 import CardImage from "../CardImage/CardImage";
-// Images
-import marsImage2 from "../../assets/mars-image2.jpeg";
+import Header from "../Header/Header";
 // Constants
 import * as CONST_CONFIG from "../../constants/roverPhotos";
 import * as CONST_BUTTON from "../../constants/buttons";
@@ -37,9 +36,7 @@ const FavoritePhotos = () => {
 
   return (
     <div className={classes.root}>
-      <header className={classes.header}>
-        <img src={marsImage2} alt="Header" className={classes.headerImage} />
-      </header>
+      <Header />
       <Button
         variant="contained"
         color="primary"
