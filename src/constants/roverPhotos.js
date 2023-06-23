@@ -33,7 +33,7 @@ export const NO_FAV_IMAGES =
 //
 export const DEFAULT_ROVER = "curiosity";
 //
-export const BASE_URL = "https://api.nasa.gov/mars-photos/api/v1/rovers/";
+export const BASE_URL = "https://api.nasa.gov/mars-photos/api/v1/rovers";
 export const API_KEY = "wljhnnGdFl9r3MLBTzyMrKTjItUWJ7pqzijkAGuf";
 export const IMAGES_PER_PAGE = 25;
 //

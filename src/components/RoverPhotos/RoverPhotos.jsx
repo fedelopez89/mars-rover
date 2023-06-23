@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import {
   Button,
   CircularProgress,
@@ -17,10 +17,13 @@ import { Link } from "react-router-dom";
 // Components
 import CardImage from "../CardImage/CardImage";
 import Header from "../Header/Header";
+import {
+  galleryPhotosReducer,
+  initialState,
+  actionTypes,
+} from "../../reducers/galleryPhotos";
 // Utils
-import useMarsRoverPhotos, {
-  getEarthDate,
-} from "../../hooks/useMarsRoverPhotos";
+import useMarsRoverPhotos from "../../hooks/useMarsRoverPhotos";
 // Constants
 import * as CONST_CONFIG from "../../constants/roverPhotos";
 import * as CONST_BUTTON from "../../constants/buttons";
@@ -29,119 +32,112 @@ import useStyles from "./RoverPhotosStyles";
 
 const RoverPhotos = () => {
   const classes = useStyles();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCamera, setSelectedCamera] = useState(null);
-  const [selectedRover, setSelectedRover] = useState(
-    CONST_CONFIG.DEFAULT_ROVER
+
+  const [galleryState, dispatchGalleryAction] = useReducer(
+    galleryPhotosReducer,
+    initialState
   );
-  const [selectedDate, setSelectedDate] = useState(getEarthDate());
-  const [selectedSol, setSelectedSol] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-  const [favoritesPhotos, setFavoritesPhotos] = useState([]);
-  const [openFavoriteModal, setOpenFavoriteModal] = useState(false);
 
   const { photos, loading, totalPages } = useMarsRoverPhotos({
-    rover: selectedRover,
-    camera: selectedCamera === "all" ? null : selectedCamera,
-    earth: selectedDate === "" ? null : selectedDate,
-    sol: selectedSol,
-    page: currentPage,
+    rover: galleryState?.selectedRover,
+    camera:
+      galleryState?.selectedCamera === "all"
+        ? null
+        : galleryState?.selectedCamera,
+    earth:
+      galleryState?.selectedDate === "" ? null : galleryState?.selectedDate,
+    sol: galleryState?.selectedSol,
+    page: galleryState?.currentPage,
   });
 
-  const handleFavoriteSave = () => {
-    if (selectedRover || selectedCamera || selectedDate || selectedSol) {
-      const newFavorite = {
-        rover: selectedRover,
-        camera: selectedCamera,
-        date: selectedDate,
-        sol: selectedSol,
-      };
-      const updatedFavorites =
-        favorites?.length > 0 ? [...favorites, newFavorite] : [newFavorite];
-      localStorage.setItem("favoriteSearch", JSON.stringify(updatedFavorites));
-      setFavorites((prevFavorites) =>
-        prevFavorites?.length > 0
-          ? [...prevFavorites, newFavorite]
-          : [newFavorite]
-      );
-    }
-  };
-
-  const handlePageChange = useCallback((page) => {
-    setCurrentPage(page);
-  }, []);
-
-  const handleRoverChange = useCallback((event) => {
-    setSelectedRover(event.target.value);
-    setCurrentPage(1);
-  }, []);
-
-  const handleCameraChange = useCallback((event) => {
-    setSelectedCamera(event.target.value);
-    setCurrentPage(1);
-  }, []);
-
-  const handleDateChange = useCallback((event) => {
-    setSelectedDate(event.target.value);
-    setSelectedSol("");
-    setCurrentPage(1);
-  }, []);
-
-  const handleSolChange = useCallback((event) => {
-    setSelectedSol(event.target.value);
-    setSelectedDate("");
-    setCurrentPage(1);
-  }, []);
-
-  const handleFavoriteClick = useCallback((photo) => {
-    setFavoritesPhotos((prevFavorites) => {
-      const isFavorite = prevFavorites.some(
-        (favorite) => favorite.id === photo.id
-      );
-      let updatedFavorites = [];
-      if (isFavorite) {
-        updatedFavorites = prevFavorites.filter(
-          (favorite) => favorite.id !== photo.id
-        );
-      } else {
-        updatedFavorites = [...prevFavorites, photo];
-      }
-      localStorage.setItem("favoritesPhotos", JSON.stringify(updatedFavorites));
-      return updatedFavorites;
+  const handleFavoriteSave = useCallback(() => {
+    dispatchGalleryAction({
+      type: actionTypes.SAVE_FAV_SEARCH,
     });
   }, []);
 
-  const handleOpenFavoriteSave = () => {
-    setOpenFavoriteModal(true);
-  };
-
-  const handleFavoriteSelection = (favorite) => {
-    setSelectedRover(favorite.rover);
-    setSelectedCamera(favorite.camera);
-    setSelectedDate(favorite.date);
-    setSelectedSol(favorite.sol);
-    setOpenFavoriteModal(false);
-  };
-
-  const handleRemoveFavorite = (favSelected) => {
-    localStorage.setItem(
-      "favoriteSearch",
-      JSON.stringify(favorites.filter((favorite) => favorite !== favSelected))
-    );
-    setFavorites((prevFavorites) =>
-      prevFavorites.filter((favorite) => favorite !== favSelected)
-    );
-  };
-
-  useEffect(() => {
-    const favoritesFromStorage = localStorage.getItem("favoritesPhotos");
-    const initialFavoritesPhotos = favoritesFromStorage
-      ? JSON.parse(favoritesFromStorage)
-      : [];
-    setFavoritesPhotos(initialFavoritesPhotos);
+  const handlePageChange = useCallback((_, page) => {
+    dispatchGalleryAction({
+      type: actionTypes.SET_CURRENT_PAGE,
+      payload: {
+        page,
+      },
+    });
   }, []);
 
-  const renderPhotos = () => {
+  const handleRoverChange = useCallback((event) => {
+    dispatchGalleryAction({
+      type: actionTypes.SET_CURRENT_ROVER,
+      payload: {
+        rover: event.target.value,
+      },
+    });
+  }, []);
+
+  const handleCameraChange = useCallback((event) => {
+    dispatchGalleryAction({
+      type: actionTypes.SET_CURRENT_CAMERA,
+      payload: {
+        camera: event.target.value,
+      },
+    });
+  }, []);
+
+  const handleDateChange = useCallback((event) => {
+    dispatchGalleryAction({
+      type: actionTypes.SET_CURRENT_DATE,
+      payload: {
+        date: event.target.value,
+      },
+    });
+  }, []);
+
+  const handleSolChange = useCallback((event) => {
+    dispatchGalleryAction({
+      type: actionTypes.SET_CURRENT_SOL,
+      payload: {
+        sol: event.target.value,
+      },
+    });
+  }, []);
+
+  const handleFavoriteClick = useCallback((photo) => {
+    dispatchGalleryAction({
+      type: actionTypes.SET_FAVORITE_PHOTO,
+      payload: {
+        photo,
+      },
+    });
+  }, []);
+
+  const handleOpenFavoriteSave = useCallback(() => {
+    dispatchGalleryAction({
+      type: actionTypes.OPEN_FAV_MODAL,
+      payload: {
+        value: true,
+      },
+    });
+  }, []);
+
+  const handleFavoriteSelection = useCallback((selectedFavorite) => {
+    dispatchGalleryAction({
+      type: actionTypes.SELECT_FAV_SEARCH,
+      payload: {
+        selectedFavorite,
+      },
+    });
+  }, []);
+
+  const handleRemoveFavorite = useCallback((favSelected) => {
+    dispatchGalleryAction({
+      type: actionTypes.REMOVE_FAV_SEARCH,
+      payload: {
+        favSelected,
+      },
+    });
+  }, []);
+
+  const renderPhotos = useCallback(() => {
     if (photos?.length === 0) {
       return (
         <div className={classes.noResultsContainer}>
@@ -155,17 +151,21 @@ const RoverPhotos = () => {
       <CardImage
         key={photo.id}
         photo={photo}
-        favoritesPhotos={favoritesPhotos}
+        favoritesPhotos={galleryState?.favoritesPhotos}
         onFavoriteClick={handleFavoriteClick}
       />
     ));
-  };
+  }, [
+    photos,
+    classes.noResultsContainer,
+    galleryState?.favoritesPhotos,
+    handleFavoriteClick,
+  ]);
 
   useEffect(() => {
-    const storedFavorites = localStorage.getItem("favoriteSearch");
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
+    dispatchGalleryAction({
+      type: actionTypes.INITIALIZE,
+    });
   }, []);
 
   return (
@@ -190,7 +190,7 @@ const RoverPhotos = () => {
               <Select
                 labelId="rover-search-label"
                 id="rover-search"
-                value={selectedRover || ""}
+                value={galleryState?.selectedRover || ""}
                 onChange={handleRoverChange}
                 className={classes.selectField}
               >
@@ -212,7 +212,7 @@ const RoverPhotos = () => {
               <Select
                 labelId="camera-search-label"
                 id="camera-search"
-                value={selectedCamera || ""}
+                value={galleryState?.selectedCamera || ""}
                 onChange={handleCameraChange}
                 className={classes.selectField}
               >
@@ -227,7 +227,7 @@ const RoverPhotos = () => {
               <InputLabel
                 className={classes.inputLabel}
                 id="date-input-label"
-                shrink={Boolean(selectedDate)}
+                shrink={Boolean(galleryState?.selectedDate)}
               >
                 {CONST_CONFIG.SEARCH_EARTH_DAY_DATE}
               </InputLabel>
@@ -245,7 +245,7 @@ const RoverPhotos = () => {
                     max: "2100-12-31",
                   },
                 }}
-                value={selectedDate}
+                value={galleryState?.selectedDate}
                 onChange={handleDateChange}
               />
             </Grid>
@@ -253,7 +253,7 @@ const RoverPhotos = () => {
               <InputLabel
                 className={classes.inputLabel}
                 id="date-input-label"
-                shrink={Boolean(selectedDate)}
+                shrink={Boolean(galleryState?.selectedSol)}
               >
                 {CONST_CONFIG.SEARCH_SOL}
               </InputLabel>
@@ -265,7 +265,7 @@ const RoverPhotos = () => {
                   shrink: true,
                   className: classes.inputLabel,
                 }}
-                value={selectedSol || ""}
+                value={galleryState?.selectedSol || ""}
                 onChange={handleSolChange}
               />
             </Grid>
@@ -306,7 +306,7 @@ const RoverPhotos = () => {
               <div className={classes.paginationContainer}>
                 <Pagination
                   count={totalPages}
-                  page={currentPage}
+                  page={galleryState.currentPage}
                   onChange={handlePageChange}
                   color="primary"
                   size="large"
@@ -320,8 +320,15 @@ const RoverPhotos = () => {
         )}
       </div>
       <Modal
-        open={openFavoriteModal}
-        onClose={() => setOpenFavoriteModal(false)}
+        open={galleryState?.openFavoriteModal}
+        onClose={() =>
+          dispatchGalleryAction({
+            type: actionTypes.OPEN_FAV_MODAL,
+            payload: {
+              value: false,
+            },
+          })
+        }
         className={classes.favoriteModalWrapper}
       >
         <div className={classes.favoriteModal}>
@@ -329,11 +336,11 @@ const RoverPhotos = () => {
             {CONST_CONFIG.MODAL_TITLE_FAV_SEARCHS}
           </Typography>
           <Typography className={classes.favoriteModalItem} variant="h6">
-            {favorites?.length === 0
+            {galleryState?.favorites?.length === 0
               ? CONST_CONFIG.NO_FAV_SEARCHES
               : CONST_CONFIG.PARAMS_SEARCH_FAV}
           </Typography>
-          {favorites?.map((favorite, index) => (
+          {galleryState?.favorites?.map((favorite, index) => (
             <div key={index} className={classes.favoriteModalItem}>
               <Typography
                 className={classes.favoriteRowData}

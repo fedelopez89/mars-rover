@@ -19,7 +19,7 @@ const CardImage = ({ photo, favoritesPhotos, onFavoriteClick = () => {} }) => {
   };
 
   useEffect(() => {
-    const isPhotoFavorite = favoritesPhotos.some(
+    const isPhotoFavorite = favoritesPhotos?.some(
       (favorite) => favorite.id === photo.id
     );
     setIsFavorite(isPhotoFavorite);
